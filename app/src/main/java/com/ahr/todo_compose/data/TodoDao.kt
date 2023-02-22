@@ -1,0 +1,36 @@
+package com.ahr.todo_compose.data
+
+import androidx.room.*
+import com.ahr.todo_compose.data.model.TodoTask
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface TodoDao {
+
+    @Query("SELECT * FROM todo_table ORDER BY id ASC")
+    fun getAllTasks(): Flow<List<TodoTask>>
+
+    @Query("SELECT * FROM todo_table WHERE id = :taskId")
+    fun getSelectedTask(taskId: Int): Flow<TodoTask>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTask(todoTask: TodoTask)
+
+    @Update
+    suspend fun updateTask(todoTask: TodoTask)
+
+    @Delete
+    suspend fun deleteTask(todoTask: TodoTask)
+
+    @Query("DELETE FROM todo_table")
+    suspend fun deleteAllTasks()
+
+    @Query("SELECT * FROM todo_table WHERE title LIKE :searchQuery OR description LIKE :searchQuery")
+    fun searchTasks(searchQuery: String): Flow<List<TodoTask>>
+
+    @Query("SELECT * FROM todo_table ORDER BY CASE WHEN priority LIKE 'L%' THEN 1 WHEN priority LIKE 'M%' THEN 2 WHEN priority LIKE 'M%' THEN 3 END")
+    fun sortByLowPriority(): Flow<List<TodoTask>>
+
+    @Query("SELECT * FROM todo_table ORDER BY CASE WHEN priority LIKE 'H%' THEN 1 WHEN priority LIKE 'M%' THEN 2 WHEN priority LIKE 'L%' THEN 3 END")
+    fun sortByHighPriority(): Flow<List<TodoTask>>
+}
