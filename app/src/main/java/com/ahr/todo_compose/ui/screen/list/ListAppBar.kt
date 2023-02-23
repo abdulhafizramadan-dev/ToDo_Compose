@@ -1,15 +1,24 @@
 package com.ahr.todo_compose.ui.screen.list
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ahr.todo_compose.R
 import com.ahr.todo_compose.data.model.Priority
 import com.ahr.todo_compose.ui.component.PriorityItem
@@ -40,6 +49,63 @@ fun DefaultListAppBar(
             )
         }
     )
+}
+
+@Composable
+fun SearchAppBar(
+    query: String,
+    onQueryChanged: (String) -> Unit,
+    onCloseClicked: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .height(56.dp)
+            .fillMaxWidth(),
+        elevation = AppBarDefaults.TopAppBarElevation,
+        color = MaterialTheme.colors.primarySurface
+    ) {
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = query,
+            onValueChange = onQueryChanged,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.alpha(ContentAlpha.medium),
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.search_tasks),
+                    modifier = Modifier.alpha(ContentAlpha.medium),
+                    color = Color.White
+                )
+            },
+            singleLine = true,
+            trailingIcon = {
+                IconButton(onClick = onCloseClicked) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(R.string.close_search),
+                        tint = Color.White
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+
+            }),
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = Color.White,
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            )
+        )
+    }
 }
 
 @Composable
@@ -127,5 +193,18 @@ fun DeleteAllAction(
 fun ListAppBarPreview() {
     ToDoComposeTheme {
         ListAppBar()
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun SearchAppBarPreview() {
+    ToDoComposeTheme {
+        SearchAppBar(
+            query = "",
+            onQueryChanged = {},
+            onCloseClicked = {}
+        )
     }
 }
