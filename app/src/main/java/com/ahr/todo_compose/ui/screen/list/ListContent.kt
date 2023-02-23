@@ -20,7 +20,24 @@ fun ListContent(
     navigateToTaskScreen: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface(modifier = modifier.fillMaxSize()) {
+    if (tasks.isNotEmpty()) {
+        DisplayTasks(
+            tasks = tasks,
+            navigateToTaskScreen = navigateToTaskScreen,
+            modifier = modifier
+        )
+    } else {
+        EmptyContent(modifier = modifier)
+    }
+}
+
+@Composable
+fun DisplayTasks(
+    tasks: List<TodoTask>,
+    navigateToTaskScreen: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -30,6 +47,7 @@ fun ListContent(
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterialApi::class)
