@@ -21,9 +21,10 @@ fun ListScreen(
     navigateToTaskScreen: (Int) -> Unit,
 ) {
     Scaffold(
+        topBar = { ListAppBar() },
         floatingActionButton = {
             ListFab { navigateToTaskScreen(-1) }
-        }
+        },
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
 
