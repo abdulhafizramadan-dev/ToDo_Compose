@@ -23,14 +23,38 @@ import com.ahr.todo_compose.R
 import com.ahr.todo_compose.data.model.Priority
 import com.ahr.todo_compose.ui.component.PriorityItem
 import com.ahr.todo_compose.ui.theme.ToDoComposeTheme
+import com.ahr.todo_compose.ui.viewmodel.SharedViewModel
+import com.ahr.todo_compose.util.SearchAppBarState
+import com.ahr.todo_compose.util.TrailingIconState
 
 @Composable
-fun ListAppBar() {
-    DefaultListAppBar(
-        onSearchClicked = {},
-        onSortClicked = {},
-        onDeleteAllClicked = {}
-    )
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchQueryState: String
+) {
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteAllClicked = {}
+            )
+        }
+        else -> {
+            SearchAppBar(
+                query = searchQueryState,
+                onQueryChanged = { newQuery ->
+                    sharedViewModel.searchQueryState.value = newQuery
+                },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -57,6 +81,11 @@ fun SearchAppBar(
     onQueryChanged: (String) -> Unit,
     onCloseClicked: () -> Unit
 ) {
+
+    var trailingIconState by remember {
+        mutableStateOf(TrailingIconState.READY_TO_DELETE)
+    }
+
     Surface(
         modifier = Modifier
             .height(56.dp)
@@ -85,7 +114,21 @@ fun SearchAppBar(
             },
             singleLine = true,
             trailingIcon = {
-                IconButton(onClick = onCloseClicked) {
+                IconButton(onClick = {
+                    when (trailingIconState) {
+                        TrailingIconState.READY_TO_DELETE -> {
+                            onQueryChanged("")
+                            trailingIconState = TrailingIconState.READY_TO_CLOSE
+                        }
+                        TrailingIconState.READY_TO_CLOSE -> {
+                            if (query.isNotEmpty()) {
+                                onQueryChanged("")
+                            } else {
+                                onCloseClicked()
+                            }
+                        }
+                    }
+                }) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(R.string.close_search),
@@ -184,15 +227,6 @@ fun DeleteAllAction(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun ListAppBarPreview() {
-    ToDoComposeTheme {
-        ListAppBar()
     }
 }
 
