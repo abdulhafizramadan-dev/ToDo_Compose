@@ -4,10 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ahr.todo_compose.navigation.TodoNavigation
@@ -25,17 +21,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    navController = rememberNavController()
-                    TodoNavigation(
-                        navController = navController,
-                        sharedViewModel = sharedViewModel
-                    )
-                }
+                navController = rememberNavController()
+                TodoNavigation(
+                    navController = navController,
+                    sharedViewModel = sharedViewModel
+                )
             }
         }
     }

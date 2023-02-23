@@ -1,6 +1,5 @@
 package com.ahr.todo_compose.ui.screen.list
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -8,6 +7,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,12 @@ fun ListScreen(
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchQueryState: String by sharedViewModel.searchQueryState
 
+    val allTasks by sharedViewModel.allTasks.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        sharedViewModel.getAllTasks()
+    }
+
     Scaffold(
         topBar = {
             ListAppBar(
@@ -36,9 +43,11 @@ fun ListScreen(
             ListFab { navigateToTaskScreen(-1) }
         },
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
-
-        }
+        ListContent(
+            tasks = allTasks,
+            navigateToTaskScreen = navigateToTaskScreen,
+            modifier = Modifier.padding(paddingValues),
+        )
     }
 }
 

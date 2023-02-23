@@ -2,6 +2,8 @@ package com.ahr.todo_compose.ui.screen.list
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,8 +15,21 @@ import com.ahr.todo_compose.data.model.TodoTask
 import com.ahr.todo_compose.ui.theme.ToDoComposeTheme
 
 @Composable
-fun ListContent(modifier: Modifier = Modifier) {
-
+fun ListContent(
+    tasks: List<TodoTask>,
+    navigateToTaskScreen: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = tasks, key = { it.id }) { todoTask ->
+                TodoTaskItem(todoTask = todoTask, onTaskClicked = navigateToTaskScreen)
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -29,7 +44,7 @@ fun TodoTaskItem(
             Row {
                 Text(
                     text = todoTask.title,
-                    style = MaterialTheme.typography.subtitle1,
+                    style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
