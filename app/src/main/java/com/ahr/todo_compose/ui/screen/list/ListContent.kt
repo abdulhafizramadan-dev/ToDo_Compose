@@ -13,21 +13,24 @@ import androidx.compose.ui.unit.dp
 import com.ahr.todo_compose.data.model.Priority
 import com.ahr.todo_compose.data.model.TodoTask
 import com.ahr.todo_compose.ui.theme.ToDoComposeTheme
+import com.ahr.todo_compose.util.RequestState
 
 @Composable
 fun ListContent(
-    tasks: List<TodoTask>,
+    tasks: RequestState<List<TodoTask>>,
     navigateToTaskScreen: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (tasks.isNotEmpty()) {
-        DisplayTasks(
-            tasks = tasks,
-            navigateToTaskScreen = navigateToTaskScreen,
-            modifier = modifier
-        )
-    } else {
-        EmptyContent(modifier = modifier)
+    if (tasks is RequestState.Success) {
+        if (tasks.data.isNotEmpty()) {
+            DisplayTasks(
+                tasks = tasks.data,
+                navigateToTaskScreen = navigateToTaskScreen,
+                modifier = modifier
+            )
+        } else {
+            EmptyContent(modifier = modifier)
+        }
     }
 }
 
