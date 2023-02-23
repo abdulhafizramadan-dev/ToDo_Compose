@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">To-Do Compose</string>
     <string name="add_new_task">Add new task</string>
+    <string name="search_tasks">Search Tasks</string>
+    <string name="sort_tasks">Sort tasks</string>
+    <string name="more_options">More Options</string>
+    <string name="delete_all">Delete All</string>
 </resources>
