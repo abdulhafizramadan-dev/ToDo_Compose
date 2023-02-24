@@ -9,4 +9,6 @@
     <string name="no_tasks_found">No Tasks Found.</string>
     <string name="back">Back</string>
     <string name="save_task">Save Task</string>
+    <string name="update_task">Update task</string>
+    <string name="delete_task">Delete Task</string>
 </resources>
