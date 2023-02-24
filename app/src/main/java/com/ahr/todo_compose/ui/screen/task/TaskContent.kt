@@ -21,10 +21,11 @@ fun TaskContent(
     description: String,
     onDescriptionChanged: (String) -> Unit,
     priority: Priority,
-    onPriorityChanged: (Priority) -> Unit
+    onPriorityChanged: (Priority) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(all = 16.dp)
     ) {
@@ -38,8 +39,7 @@ fun TaskContent(
         Spacer(modifier = Modifier.height(8.dp))
         PriorityDropDown(
             priority = priority,
-            onPriorityChanged = onPriorityChanged,
-            dropdownModifier = Modifier.padding(horizontal = 16.dp)
+            onPriorityChanged = onPriorityChanged
         )
         OutlinedTextField(
             value = description,
