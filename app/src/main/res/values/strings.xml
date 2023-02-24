@@ -7,4 +7,6 @@
     <string name="delete_all">Delete All</string>
     <string name="close_search">Close search</string>
     <string name="no_tasks_found">No Tasks Found.</string>
+    <string name="back">Back</string>
+    <string name="save_task">Save Task</string>
 </resources>
