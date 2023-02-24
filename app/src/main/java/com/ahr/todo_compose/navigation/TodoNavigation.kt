@@ -26,6 +26,7 @@ fun TodoNavigation(
             navigateToTaskScreen = navigator.toTaskScreen,
         )
         taskComposable(
+            sharedViewModel = sharedViewModel,
             navigateToListScreen = navigator.toListScreen
         )
     }

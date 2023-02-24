@@ -17,9 +17,17 @@ import com.ahr.todo_compose.util.Action
 
 @Composable
 fun TaskAppBar(
+    selectedTask: TodoTask?,
     navigateToListScreen: (Action) -> Unit
 ) {
-    NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    if (selectedTask == null) {
+        NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    } else {
+        ExistingTaskAppBar(
+            todoTask = selectedTask,
+            navigateToListScreen = navigateToListScreen
+        )
+    }
 }
 
 @Composable
