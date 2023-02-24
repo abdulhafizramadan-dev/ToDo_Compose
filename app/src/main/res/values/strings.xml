@@ -11,4 +11,6 @@
     <string name="save_task">Save Task</string>
     <string name="update_task">Update task</string>
     <string name="delete_task">Delete Task</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>

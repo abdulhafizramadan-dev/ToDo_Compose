@@ -24,7 +24,8 @@ import com.ahr.todo_compose.ui.theme.ToDoComposeTheme
 fun PriorityDropDown(
     priority: Priority,
     onPriorityChanged: (Priority) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    dropdownModifier: Modifier = Modifier
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -34,17 +35,18 @@ fun PriorityDropDown(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(56.dp)
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
-                shape = MaterialTheme.shapes.medium
+                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.disabled),
+                shape = MaterialTheme.shapes.small
             )
             .clickable { expanded = !expanded }
     ) {
         Canvas(modifier = Modifier
             .size(16.dp)
-            .weight(1f)) {
+            .weight(2f)
+        ) {
             drawCircle(priority.color)
         }
         Text(
@@ -62,7 +64,7 @@ fun PriorityDropDown(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = !expanded },
-            modifier = Modifier.fillMaxWidth()
+            modifier = dropdownModifier.fillMaxWidth(0.92f)
         ) {
             val priorities = Priority.values()
             priorities.forEach { priority ->
