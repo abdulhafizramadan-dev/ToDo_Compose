@@ -76,7 +76,7 @@ class SharedViewModel @Inject constructor(
         when (action) {
             Action.ADD -> addTask()
             Action.UPDATE-> updateTask()
-            Action.DELETE->{}
+            Action.DELETE-> deleteTask()
             Action.DELETE_ALL->{}
             Action.UNDO->{}
             else ->{}
@@ -104,6 +104,18 @@ class SharedViewModel @Inject constructor(
                 priority = priority.value
             )
             repository.updateTask(todoTask = todoTask)
+        }
+    }
+
+    private fun deleteTask() {
+        viewModelScope.launch {
+            val todoTask = TodoTask(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.deleteTask(todoTask = todoTask)
         }
     }
 }
