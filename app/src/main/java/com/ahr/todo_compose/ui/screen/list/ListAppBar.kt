@@ -85,7 +85,7 @@ fun SearchAppBar(
 ) {
 
     var trailingIconState by remember {
-        mutableStateOf(TrailingIconState.READY_TO_DELETE)
+        mutableStateOf(TrailingIconState.READY_TO_CLOSE)
     }
 
     Surface(
@@ -98,7 +98,14 @@ fun SearchAppBar(
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = query,
-            onValueChange = onQueryChanged,
+            onValueChange = { searchQuery ->
+                onQueryChanged(searchQuery)
+                trailingIconState = if (searchQuery.isNotEmpty()) {
+                    TrailingIconState.READY_TO_DELETE
+                } else {
+                    TrailingIconState.READY_TO_CLOSE
+                }
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
