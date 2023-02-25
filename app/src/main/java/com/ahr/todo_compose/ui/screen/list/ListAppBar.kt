@@ -31,7 +31,8 @@ import com.ahr.todo_compose.util.TrailingIconState
 fun ListAppBar(
     sharedViewModel: SharedViewModel,
     searchAppBarState: SearchAppBarState,
-    searchQueryState: String
+    searchQueryState: String,
+    onQueryChanged: (String) -> Unit
 ) {
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
@@ -48,6 +49,7 @@ fun ListAppBar(
                 query = searchQueryState,
                 onQueryChanged = { newQuery ->
                     sharedViewModel.searchQueryState.value = newQuery
+                    onQueryChanged(newQuery)
                 },
                 onCloseClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED

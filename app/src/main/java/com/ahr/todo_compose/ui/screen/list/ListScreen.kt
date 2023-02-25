@@ -32,6 +32,12 @@ fun ListScreen(
     LaunchedEffect(key1 = Unit) {
         sharedViewModel.getAllTasks()
     }
+
+    LaunchedEffect(key1 = searchAppBarState) {
+        if (searchAppBarState == SearchAppBarState.CLOSED) {
+            sharedViewModel.getAllTasks()
+        }
+    }
     
     DisplaySnackBar(
         scaffoldState = scaffoldState,
@@ -48,7 +54,8 @@ fun ListScreen(
             ListAppBar(
                 sharedViewModel = sharedViewModel,
                 searchAppBarState = searchAppBarState,
-                searchQueryState = searchQueryState
+                searchQueryState = searchQueryState,
+                onQueryChanged = { query -> sharedViewModel.searchTasks(query) }
             )
          },
         floatingActionButton = {

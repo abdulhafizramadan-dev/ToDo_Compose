@@ -1,6 +1,8 @@
 package com.ahr.todo_compose.ui.screen.list
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,6 +36,7 @@ fun ListContent(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DisplayTasks(
     tasks: List<TodoTask>,
@@ -46,7 +49,11 @@ fun DisplayTasks(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = tasks, key = { it.id }) { todoTask ->
-                TodoTaskItem(todoTask = todoTask, onTaskClicked = navigateToTaskScreen)
+                TodoTaskItem(
+                    todoTask = todoTask,
+                    onTaskClicked = navigateToTaskScreen,
+                    modifier = modifier.animateItemPlacement(tween(durationMillis = 100))
+                )
             }
         }
     }

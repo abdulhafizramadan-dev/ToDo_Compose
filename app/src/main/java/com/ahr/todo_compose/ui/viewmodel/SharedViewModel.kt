@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,7 +40,18 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAllTasks
                 .catch { _allTasks.value = RequestState.Error(it) }
-                .collect { _allTasks.value = RequestState.Success(it)}
+                .collect { _allTasks.value = RequestState.Success(it) }
+        }
+    }
+
+    fun searchTasks(searchQuery: String) {
+        _allTasks.value = RequestState.Loading
+        viewModelScope.launch {
+            repository.searchTasks("%$searchQuery%")
+                .catch { _allTasks.value = RequestState.Error(it) }
+                .collectLatest { searchedTasks ->
+                    _allTasks.value = RequestState.Success(searchedTasks)
+                }
         }
     }
 
@@ -75,11 +87,11 @@ class SharedViewModel @Inject constructor(
     fun handleDatabaseOperation(action: Action) {
         when (action) {
             Action.ADD -> addTask()
-            Action.UPDATE-> updateTask()
-            Action.DELETE-> deleteTask()
-            Action.UNDO-> addTask()
-            Action.DELETE_ALL->{}
-            else ->{}
+            Action.UPDATE -> updateTask()
+            Action.DELETE -> deleteTask()
+            Action.UNDO -> addTask()
+            Action.DELETE_ALL -> {}
+            else -> {}
         }
         this.action.value = Action.NO_ACTION
     }
