@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahr.todo_compose.data.model.Priority
 import com.ahr.todo_compose.data.model.TodoTask
 import com.ahr.todo_compose.data.repository.TodoRepository
+import com.ahr.todo_compose.util.Action
 import com.ahr.todo_compose.util.RequestState
 import com.ahr.todo_compose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,8 @@ class SharedViewModel @Inject constructor(
     val title = mutableStateOf("")
     val description = mutableStateOf("")
     val priority = mutableStateOf(Priority.LOW)
+
+    val action = mutableStateOf(Action.NO_ACTION)
 
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
@@ -67,5 +70,28 @@ class SharedViewModel @Inject constructor(
 
     fun validateFields(): Boolean {
         return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
+
+    fun handleDatabaseOperation(action: Action) {
+        when (action) {
+            Action.ADD-> addTask()
+            Action.UPDATE->{}
+            Action.DELETE->{}
+            Action.DELETE_ALL->{}
+            Action.UNDO->{}
+            else ->{}
+        }
+        this.action.value = Action.NO_ACTION
+    }
+
+    private fun addTask() {
+        viewModelScope.launch {
+            val todoTask = TodoTask(
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.addTask(todoTask)
+        }
     }
 }
