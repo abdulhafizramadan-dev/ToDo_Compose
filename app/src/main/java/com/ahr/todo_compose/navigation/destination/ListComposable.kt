@@ -21,7 +21,7 @@ fun NavGraphBuilder.listComposable(
     ) { navBackStackEntry ->
         val action = navBackStackEntry.arguments?.getString(LIST_ARGUMENT_KEY).toAction()
         LaunchedEffect(key1 = action) {
-            sharedViewModel.handleDatabaseOperation(action)
+            sharedViewModel.action.value = action
         }
         ListScreen(
             sharedViewModel = sharedViewModel,
